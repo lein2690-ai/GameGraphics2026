@@ -1,5 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;   // using 줄에 추가
+
+using TMPro;   // 기존 using 두 줄 아래에 추가
+
 public class PlayerController : MonoBehaviour
 {
     public string playerName = "Player";
@@ -14,6 +18,10 @@ public class PlayerController : MonoBehaviour
     private float facing = 1f;
     private bool isGrounded = false;
     private bool isGameOver = false;
+    public TMP_Text livesText;
+    public GameObject gameOverPanel;
+    public string nextSceneName = "Stage2";
+
 
     private Vector2 moveInput;
 
@@ -35,12 +43,9 @@ public class PlayerController : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         transform.position = startPosition;
-        Debug.Log(playerName+"시작.목숨"+lives);
-        Debug.Log("피격 후 체력" + (hp - 30));
-        Debug.Log("달리기 속도" + moveSpeed * 2);
-        Debug.Log("10/4=" + 10f / 4f);
+        livesText.text = "LIFE " + lives;
     }
-   
+
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -58,6 +63,33 @@ public class PlayerController : MonoBehaviour
           //Debug.Log("공중");
         }
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // Update의 나머지는 그대로
+        if (other.CompareTag("Goal"))
+        {
+            SceneManager.LoadScene(nextSceneName);
+
+        }
+        else if (other.CompareTag("Trap"))
+        {
+            LoseLife();
+        }
+    }
+    void LoseLife()
+        {
+            lives -= 1;
+            transform.position = startPosition;
+            rb.linearVelocity = Vector2.zero;
+        livesText.text = "LIFE " + lives;
+        if (lives <= 0)
+        {
+            isGameOver = true;
+            gameOverPanel.SetActive(true);
+        }
+    }
+
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -82,24 +114,13 @@ public class PlayerController : MonoBehaviour
         {
             transform.Translate(Vector3.right * moveInput.x
                     * moveSpeed * Time.deltaTime);
-            
-        // 아래 낙사 if 블록은 그대로
 
+            // 아래 낙사 if 블록은 그대로
             if (transform.position.y < fallLimit)
             {
-                lives -= 1;
-                transform.position = startPosition;
-                rb.linearVelocity = Vector2.zero;
-                Debug.Log("낙사. 남은 목숨 " + lives);
-                if (lives <= 0)
-                {
-                    isGameOver = true;
-                    Debug.Log("게임 오버");
-                }
+                LoseLife();
             }
             //Debug.Log("Update");
-            transform.Translate(Vector3.right * moveInput.x * moveSpeed * Time.deltaTime);
-
         }
         if (isGrounded)
         { visual.localScale = new Vector3(facing, 1f, 1f); }
