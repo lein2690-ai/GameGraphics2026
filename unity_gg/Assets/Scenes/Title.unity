@@ -156,7 +156,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.85587025, g: 0.76561946, b: 0.8773585, a: 1}
+  m_BackGroundColor: {r: 0.6627451, g: 0.56078434, b: 0.70980394, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -495,7 +495,7 @@ GameObject:
   - component: {fileID: 1105764230}
   - component: {fileID: 1105764229}
   m_Layer: 5
-  m_Name: StartButton
+  m_Name: TitleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

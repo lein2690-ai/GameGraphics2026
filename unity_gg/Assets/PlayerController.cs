@@ -122,9 +122,20 @@ public class PlayerController : MonoBehaviour
             }
             //Debug.Log("Update");
         }
+        // 현재 인스펙터에 설정된 visual 오브젝트의 고유 Y, Z 크기값을 가져옵니다.
+        float currentScaleY = transform.Find("Visual") != null ? transform.Find("Visual").localScale.y : 1f;
+        float currentScaleZ = transform.Find("Visual") != null ? transform.Find("Visual").localScale.z : 1f;
+
+        // 만약 수동으로 크기를 정하고 싶다면 아래의 1f 자리에 원하는 크기 배율(예: 3f 등)을 직접 적으셔도 됩니다.
+        float myCharacterSize = 7.4131f;
+
         if (isGrounded)
-        { visual.localScale = new Vector3(facing, 1f, 1f); }
+        {
+            visual.localScale = new Vector3(facing * myCharacterSize, myCharacterSize, currentScaleZ);
+        }
         else
-        { visual.localScale = new Vector3( facing * airScale.x, airScale.y, 1f); }
+        {
+            visual.localScale = new Vector3(facing * airScale.x * myCharacterSize, airScale.y * myCharacterSize, currentScaleZ);
+        }
     }
-}
+    }
